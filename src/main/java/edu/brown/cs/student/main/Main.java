@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -77,6 +78,8 @@ public final class Main {
       return "OK";
     });
 
+    Spark.post("/matches", new ResultsHandler());
+
     // Allows requests from any domain (i.e., any URL). This makes development
     // easier, but it’s not a good idea for deployment.
     Spark.before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
@@ -110,6 +113,25 @@ public final class Main {
       // TODO: Get JSONObject from req and use it to get the value of the sun, moon,
       // and rising
       // for generating matches
+      List<String> matches = new ArrayList<>();
+      try {
+        JSONbject obj = new JSONObject(req.body());
+        String sun = obj.getString("sun");
+        String moon = obj.getString("moon");
+        String rising = obj.getString("rising");
+        matches = MatchMaker.makeMatches(sun, moon, rising)
+      } catch (JSONException error) {
+        throw new IllegalArgumentException("Error");
+      }
+
+      Map<String, String> objMap = new HashMap<>();
+      objMap.put("sun", matches.get(0));
+      objMap.put("moon", matches.get(1));
+      objMap.put("rising", matches.get(2));
+
+      ImmutableMap<String, String> immutableMap = ImmutableMap.copyOf(map);
+
+
 
       // TODO: use the MatchMaker.makeMatches method to get matches
 
@@ -117,7 +139,7 @@ public final class Main {
 
       // TODO: return a json of the suggestions (HINT: use GSON.toJson())
       Gson GSON = new Gson();
-      return null;
+      return GSON.toJson(immutableMap);
     }
   }
 }
