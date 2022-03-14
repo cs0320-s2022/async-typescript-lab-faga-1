@@ -30,7 +30,7 @@ function postAndUpdate(): void {
   // TODO: empty the suggestionList (you want new suggestions each time someone types something new)
   //  HINT: use .innerHTML
 
-  mySuggestions.innerHTML = ""
+  mySuggestions.innerHTML = "";
 
   // TODO: add a type annotation to make this of type MatchesRequestData
   const postParameters = {

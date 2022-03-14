@@ -129,7 +129,7 @@ public final class Main {
       objMap.put("moon", matches.get(1));
       objMap.put("rising", matches.get(2));
 
-      ImmutableMap<String, String> immutableMap = ImmutableMap.copyOf(map);
+      ImmutableMap<String, String> immutableMap = ImmutableMap.copyOf(objMap);
 
 
 
